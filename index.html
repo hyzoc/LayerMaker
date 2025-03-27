@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LayerMaker - 断面イラスト生成ツール</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/three@0.162.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.162.0/examples/jsm/controls/OrbitControls.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1 class="logo">Layer <span>Maker</span></h1>
+            <p class="header-description">断面イラスト生成ツール</p>
+        </div>
+    </header>
+
+    <div class="global-settings">
+        <div class="settings-content">
+            <div class="settings-grid">
+                <div class="settings-group">
+                    <label for="global-unit">単位</label>
+                    <select id="global-unit" onchange="changeGlobalUnit(this.value)">
+                        <option value="m">m</option>
+                        <option value="cm">cm</option>
+                        <option value="mm" selected>mm</option>
+                        <option value="μm">μm</option>
+                        <option value="nm">nm</option>
+                        <option value="none">単位なし</option>
+                    </select>
+                </div>
+                <div class="settings-group">
+                    <label>層の名称</label>
+                    <div class="setting-controls">
+                        <div class="size-input">
+                            <input type="number" id="global-name-font-size" value="20" min="0" max="100" step="1" onchange="changeFontSize()">
+                            <span class="unit">px</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="global-name-visible" checked onchange="changeFontVisibility()">
+                            <span class="toggle-slider"></span>
+                            <span class="toggle-label">表示</span>
+                        </label>
+                        <div class="text-align-options">
+                            <button class="align-button" data-align="left" data-target="name" onclick="changeTextAlign(this)">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                                    <line x1="3" y1="12" x2="15" y2="12"></line>
+                                    <line x1="3" y1="18" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                            <button class="align-button" data-align="center" data-target="name" onclick="changeTextAlign(this)">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                                    <line x1="6" y1="12" x2="18" y2="12"></line>
+                                    <line x1="4" y1="18" x2="20" y2="18"></line>
+                                </svg>
+                            </button>
+                            <button class="align-button" data-align="right" data-target="name" onclick="changeTextAlign(this)">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                                    <line x1="9" y1="12" x2="21" y2="12"></line>
+                                    <line x1="6" y1="18" x2="21" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-group">
+                    <label>層厚み</label>
+                    <div class="setting-controls">
+                        <div class="size-input">
+                            <input type="number" id="global-thickness-font-size" value="20" min="0" max="100" step="1" onchange="changeFontSize()">
+                            <span class="unit">px</span>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="global-thickness-visible" checked onchange="changeFontVisibility()">
+                            <span class="toggle-slider"></span>
+                            <span class="toggle-label">表示</span>
+                        </label>
+                        <div class="text-align-options">
+                            <button class="align-button" data-align="left" data-target="thickness" onclick="changeTextAlign(this)">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                                    <line x1="3" y1="12" x2="15" y2="12"></line>
+                                    <line x1="3" y1="18" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                            <button class="align-button" data-align="center" data-target="thickness" onclick="changeTextAlign(this)">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                                    <line x1="6" y1="12" x2="18" y2="12"></line>
+                                    <line x1="4" y1="18" x2="20" y2="18"></line>
+                                </svg>
+                            </button>
+                            <button class="align-button active" data-align="right" data-target="thickness" onclick="changeTextAlign(this)">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                                    <line x1="9" y1="12" x2="21" y2="12"></line>
+                                    <line x1="6" y1="18" x2="21" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layout">
+        <div class="sidebar">
+            <div id="layers">
+                <div class="input-group">
+                    <div class="layer-main">
+                        <div class="layer-row">
+                            <input type="text" placeholder="層の名称" class="layer-name">
+                        </div>
+                        <div class="layer-row">
+                            <div class="thickness-input">
+                                <input type="number" placeholder="厚み" class="layer-thickness" min="0" step="any">
+                                <span class="unit-display">mm</span>
+                            </div>
+                            <div class="color-preview" style="background-color: #6366f1">
+                                <input type="color" class="layer-color" value="#6366f1">
+                            </div>
+                            <button class="toggle-details" onclick="toggleDetails(this)" title="詳細設定">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M6 9l6 6 6-6"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <button class="delete-button" onclick="deleteLayer(this)" title="削除">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                    <div class="move-controls">
+                        <button class="control-button move-up" onclick="moveLayer(this, 'up')" title="上に移動">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 15l-6-6-6 6"/>
+                            </svg>
+                        </button>
+                        <button class="control-button move-down" onclick="moveLayer(this, 'down')" title="下に移動">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 9l6 6 6-6"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="layer-details">
+                        <div class="detail-group">
+                            <div class="text-options">
+                                <div class="text-display-options">
+                                    <label>
+                                        <input type="checkbox" class="show-name" checked>
+                                        <span class="checkbox-label">層の名称を表示</span>
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" class="show-thickness" checked>
+                                        <span class="checkbox-label">層厚みを表示</span>
+                                    </label>
+                                </div>
+                                <div class="text-color-options">
+                                    <label>
+                                        <input type="radio" name="text-color-1" value="white" checked>
+                                        <span class="radio-label">白文字</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="text-color-1" value="black">
+                                        <span class="radio-label">黒文字</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="sidebar-buttons">
+                <button onclick="addLayer()" class="add-button">+ 層を追加</button>
+            </div>
+        </div>
+        <main class="main-content">
+            <div class="canvas-container">
+                <canvas id="sectionCanvas" width="800" height="600"></canvas>
+                <div class="canvas-controls">
+                    <button onclick="downloadImage()" class="download-button">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        画像をダウンロード
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 LayerMaker</p>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html> 
