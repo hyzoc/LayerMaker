@@ -1,10 +1,11 @@
 :root {
-    --bg-color: #1a1a1a;
+    --bg-color: #0a0a0a;
     --text-color: #ffffff;
     --primary-color: #6366f1;
-    --secondary-color: #2d2d2d;
-    --border-color: #3d3d3d;
-    --hover-color: #7577f5;
+    --secondary-color: #1a1a1a;
+    --border-color: #2a2a2a;
+    --hover-color: #818cf8;
+    --shadow-color: rgba(0, 0, 0, 0.3);
     --sidebar-width: 400px;
 }
 
@@ -12,6 +13,10 @@
     background-color: var(--secondary-color);
     border-bottom: 1px solid var(--border-color);
     padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 6px -1px var(--shadow-color);
 }
 
 .header-content {
@@ -91,11 +96,13 @@ body {
     background-color: var(--secondary-color);
     padding: 1.25rem;
     border-radius: 12px;
-    height: calc(100vh - 13rem);
+    height: calc(100vh - 180px);
     position: sticky;
-    top: 1.5rem;
+    top: 140px;
     display: flex;
     flex-direction: column;
+    z-index: 800;
+    box-shadow: 0 4px 6px -1px var(--shadow-color);
 }
 
 .sidebar h2 {
@@ -127,6 +134,7 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+    box-shadow: 0 4px 6px -1px var(--shadow-color);
 }
 
 .canvas-controls {
@@ -147,17 +155,19 @@ canvas {
 
 .input-group {
     background: var(--bg-color);
-    padding: 1.25rem;
-    margin-bottom: 1rem;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    transition: border-color 0.2s;
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
     position: relative;
-    padding-right: 2.5rem;
+    padding-right: 3rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .input-group:hover {
-    border-color: var(--primary-color);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    transform: none;
 }
 
 .layer-header {
@@ -180,8 +190,18 @@ canvas {
 
 .layer-name {
     width: 100%;
-    padding: 0.625rem;
+    padding: 0.75rem 1rem;
     font-size: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.layer-name:focus {
+    background: rgba(0, 0, 0, 0.3);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
 }
 
 .layer-controls {
@@ -207,33 +227,34 @@ canvas {
     display: flex;
     gap: 0.5rem;
     align-items: center;
-    background: var(--secondary-color);
-    padding: 0.25rem;
-    border-radius: 6px;
-    border: 1px solid var(--border-color);
-    min-width: 180px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 0.5rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: all 0.2s ease;
+}
+
+.thickness-input:focus-within {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
 }
 
 .thickness-input input {
-    width: 100px;
-    min-width: 0;
-    border: none;
     background: transparent;
-    padding: 0.375rem 0.5rem;
+    border: none;
+    color: var(--text-color);
     font-size: 1rem;
-}
-
-.thickness-input input:focus {
-    outline: none;
+    width: 100%;
+    min-width: 0;
+    padding: 0.25rem 0.5rem;
 }
 
 .unit-display {
-    min-width: 2.5rem;
-    padding: 0.375rem 0.5rem;
-    text-align: center;
-    border-left: 1px solid var(--border-color);
-    font-size: 1rem;
-    opacity: 0.8;
+    color: var(--text-color);
+    opacity: 0.7;
+    font-size: 0.9rem;
+    padding: 0.25rem 0.75rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .control-button {
@@ -265,6 +286,7 @@ canvas {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+    z-index: 100;
 }
 
 .move-up, .move-down {
@@ -282,59 +304,55 @@ canvas {
     position: absolute;
     right: -36px;
     top: 0;
-    width: 28px;
-    height: 28px;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #dc2626;
-    border: none;
-    color: white;
-    border-radius: 4px;
-    opacity: 0.6;
-    transition: all 0.2s ease;
-}
-
-.delete-button:hover {
-    opacity: 1;
-    transform: scale(1.05);
-}
-
-.toggle-details {
     width: 32px;
     height: 32px;
     padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: transparent;
-    border: 1px solid var(--border-color);
+    background: rgba(220, 38, 38, 0.2);
+    border: 1px solid rgba(220, 38, 38, 0.3);
+    border-radius: 8px;
+    color: white;
+    transition: all 0.3s ease;
+    z-index: 100;
+}
+
+.delete-button:hover {
+    background: rgb(220, 38, 38);
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.3);
+}
+
+.toggle-details {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     color: var(--text-color);
-    border-radius: 6px;
-    opacity: 0.6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: all 0.2s ease;
+}
+
+.toggle-details:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--primary-color);
+}
+
+.toggle-details.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
 }
 
 .toggle-details svg {
     width: 16px;
     height: 16px;
-    transition: transform 0.2s ease;
-    margin: 0;
-}
-
-.toggle-details:hover {
-    opacity: 1;
-    background-color: var(--secondary-color);
-    border-color: var(--primary-color);
-    color: var(--primary-color);
-}
-
-.toggle-details.active {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-    color: var(--text-color);
-    opacity: 1;
+    transform: rotate(0deg);
+    transition: transform 0.3s ease;
 }
 
 .toggle-details.active svg {
@@ -342,18 +360,18 @@ canvas {
 }
 
 .color-preview {
-    width: 36px;
-    height: 36px;
-    border-radius: 6px;
-    border: 1px solid var(--border-color);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    position: relative;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .color-preview:hover {
-    transform: scale(1.05);
+    transform: scale(1.1);
     border-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .color-preview input[type="color"] {
@@ -397,10 +415,12 @@ input[type="color"]::-webkit-color-swatch {
 
 .layer-details {
     display: none;
-    padding: 1rem;
-    margin-top: 0.75rem;
-    background: var(--secondary-color);
-    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 1.25rem;
+    margin-top: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .layer-details.show {
@@ -445,10 +465,7 @@ input[type="color"]::-webkit-color-swatch {
 }
 
 .text-color-options input[type="radio"] {
-    width: 16px;
-    height: 16px;
-    margin: 0;
-    cursor: pointer;
+    accent-color: var(--primary-color);
 }
 
 .radio-label {
@@ -488,16 +505,22 @@ input[type="color"] {
 
 .add-button {
     width: 100%;
-    background-color: var(--primary-color);
+    background: linear-gradient(to right, var(--primary-color), var(--hover-color));
     padding: 0.75rem;
     font-weight: 500;
+    box-shadow: 0 4px 6px var(--shadow-color);
+}
+
+.add-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 8px var(--shadow-color);
 }
 
 .download-button {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    background-color: var(--primary-color);
+    background: linear-gradient(to right, var(--primary-color), var(--hover-color));
     color: var(--text-color);
     padding: 0.75rem 1.5rem;
     border-radius: 8px;
@@ -505,11 +528,12 @@ input[type="color"] {
     font-size: 1rem;
     cursor: pointer;
     transition: all 0.2s ease;
+    box-shadow: 0 4px 6px var(--shadow-color);
 }
 
 .download-button:hover {
-    background-color: var(--hover-color);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px var(--shadow-color);
 }
 
 .download-button svg {
@@ -524,11 +548,13 @@ button {
     border-radius: 6px;
     cursor: pointer;
     font-size: 1rem;
-    transition: background-color 0.2s;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px var(--shadow-color);
 }
 
 button:hover {
-    background-color: var(--hover-color);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px var(--shadow-color);
 }
 
 #layers {
@@ -546,8 +572,9 @@ button:hover {
 }
 
 #layers::-webkit-scrollbar-track {
-    background: var(--secondary-color);
+    background: var(--bg-color);
     border-radius: 4px;
+    box-shadow: inset 0 0 4px var(--shadow-color);
 }
 
 #layers::-webkit-scrollbar-thumb {
@@ -564,7 +591,8 @@ input, select {
     border-radius: 6px;
     font-size: 1rem;
     outline: none;
-    transition: border-color 0.2s;
+    transition: all 0.2s ease;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 input:focus, select:focus {
@@ -577,6 +605,10 @@ input:focus, select:focus {
     border-bottom: 1px solid var(--border-color);
     padding: 0.75rem 0;
     margin-top: 0;
+    position: sticky;
+    top: 64px;
+    z-index: 900;
+    box-shadow: 0 4px 6px -1px var(--shadow-color);
 }
 
 .settings-content {
@@ -794,10 +826,7 @@ input[type="range"]::-moz-range-track {
 }
 
 .text-display-options input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
-    margin: 0;
-    cursor: pointer;
+    accent-color: var(--primary-color);
 }
 
 .checkbox-label {
@@ -871,6 +900,7 @@ input[type="range"]::-moz-range-track {
     background-color: var(--border-color);
     border-radius: 10px;
     transition: all 0.2s ease;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .toggle-slider:before {
@@ -883,6 +913,7 @@ input[type="range"]::-moz-range-track {
     top: 2px;
     left: 2px;
     transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .toggle-switch input:checked + .toggle-slider {
@@ -946,4 +977,180 @@ input[type="range"]::-moz-range-track {
     background: var(--primary-color);
     border-color: var(--primary-color);
     opacity: 1;
+}
+
+/* レスポンシブデザインの追加 */
+@media screen and (max-width: 768px) {
+    .header {
+        position: sticky;
+        top: 0;
+    }
+
+    .global-settings {
+        position: sticky;
+        top: 64px;
+        box-shadow: 0 4px 6px -1px var(--shadow-color);
+    }
+
+    .sidebar {
+        position: relative;
+        top: 0;
+        height: auto;
+        max-height: none;
+        width: auto;
+        min-width: 0;
+        margin: 0;
+        padding: 1rem;
+        box-sizing: border-box;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .layout {
+        flex-direction: column;
+        padding: 0.5rem;
+        margin-top: 0;
+        gap: 1rem;
+    }
+
+    .main-content {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+    }
+
+    .canvas-container {
+        width: auto;
+        margin: 0;
+        padding: 1rem;
+    }
+
+    /* 層の入力部分の調整 */
+    .layer-main {
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+    }
+
+    .layer-row {
+        width: 100%;
+        flex-direction: row;
+        gap: 0.75rem;
+        align-items: center;
+    }
+
+    .layer-name {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .thickness-input {
+        flex: 1;
+        min-width: 0;
+        box-sizing: border-box;
+    }
+
+    .thickness-input input {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .input-group {
+        margin-bottom: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+        transform: none;
+    }
+
+    /* カラーピッカーとトグルボタンの配置 */
+    .layer-row:nth-child(2) {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        gap: 0.75rem;
+    }
+
+    .color-preview {
+        flex-shrink: 0;
+        margin-right: 0;
+    }
+
+    .toggle-details {
+        flex-shrink: 0;
+        margin-left: auto;
+    }
+
+    /* 操作ボタンの配置調整 */
+    .delete-button {
+        right: 0.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .move-controls {
+        display: none;
+    }
+
+    .settings-content {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+    
+    .settings-grid {
+        flex-direction: column;
+        width: 100%;
+        gap: 1rem;
+    }
+    
+    .settings-group {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .canvas-controls {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .header-content {
+        padding: 10px;
+    }
+
+    .logo {
+        font-size: 24px;
+    }
+
+    .header-description {
+        font-size: 14px;
+    }
+
+    #layers {
+        padding-right: 2.5rem;
+        margin: 0;
+    }
+}
+
+/* さらに小さい画面用の調整 */
+@media screen and (max-width: 480px) {
+    .text-align-options {
+        flex-wrap: wrap;
+    }
+
+    .layer-details {
+        padding: 10px;
+    }
+
+    .text-display-options,
+    .text-color-options {
+        flex-direction: column;
+    }
+
+    .canvas-controls {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .download-button {
+        width: 100%;
+    }
 }
