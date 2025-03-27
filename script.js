@@ -155,15 +155,22 @@ function drawSection() {
     const canvas = document.getElementById('sectionCanvas');
     const ctx = canvas.getContext('2d');
     
+    // キャンバスサイズを画面サイズに応じて調整
+    let canvasWidth = 800;
+    let canvasHeight = 600;
+    
+    if (window.innerWidth <= 768) {
+        canvasWidth = Math.min(window.innerWidth - 40, 800);
+        canvasHeight = Math.min(window.innerHeight - 200, 600);
+    }
+    
     // キャンバスの設定
-    const canvasHeight = 600;
-    const canvasWidth = 800;
     const margin = 50;
     const drawableHeight = canvasHeight - (margin * 2);
-    const drawableWidth = 500;
+    const drawableWidth = Math.min(500, canvasWidth - 100);
 
-    canvas.height = canvasHeight;
     canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     const layers = document.getElementsByClassName('input-group');
@@ -269,8 +276,12 @@ function downloadImage() {
     link.click();
 }
 
-// ウィンドウリサイズ時にキャンバスを再描画
-window.addEventListener('resize', drawSection);
+// ウィンドウリサイズ時の処理を最適化
+let resizeTimeout;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(drawSection, 250);
+});
 
 function moveLayer(button, direction) {
     const currentLayer = button.closest('.input-group');
